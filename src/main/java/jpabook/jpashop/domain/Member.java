@@ -1,9 +1,6 @@
 package jpabook.jpashop.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +17,9 @@ public class Member {
 
     private String name;
 
+    @Embedded
     private Address address;
 
+    @OneToMany(mappedBy = "member")//연관관계의 주인이 아니고 매핑되는 역할이란 의미. JPA의 규약.
     private List<Order> orders = new ArrayList<>();
 }
