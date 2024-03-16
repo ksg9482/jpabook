@@ -14,4 +14,9 @@ public class Address {
     private String street;
 
     private String zipcode;
+
+    //jpa는 객체를 생성할 때 프록시, 리플렉션등의 기능을 이용한다. 그 때 기본 생성자를 사용.
+    //public을 쓰면 접근이 너무 열려있기 때문에 jpa는 pretected까지 허용해준다.
+    //어차피 상속할일 없기 때문에 jpa 스펙용으로 한다.
+    protected Address() {}
 }

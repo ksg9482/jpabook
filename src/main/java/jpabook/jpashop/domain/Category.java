@@ -8,6 +8,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
 @Setter
@@ -30,10 +32,16 @@ public class Category {
     private List<Item> items = new ArrayList<>();
 
     //내 부모는 곧 내 타입(같은 테이블을 쓴다)
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id") //한 부모는 여러 자식 카테고리를 갖는다
     private Category parent;
 
     @OneToMany(mappedBy = "parent")//자식은 한 부모 카테고리를 갖음
     private List<Category> child;  //같은 테이블안에서 관계를 맺음
+
+    //category self도 양방향 연관관계. 자식에 들어가면 부모도 들어가야 한다.
+    public void addChildCategory(Category child) {
+        this.child.add(child); //컬렉션에 들어가야 한다.
+        child.setParent(this); //자식에도 부모가 누군지 넣어준다(컬렉션엔 부모가 입력된 child가 들어감)
+    }
 }
