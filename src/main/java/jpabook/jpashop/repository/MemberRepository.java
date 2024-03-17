@@ -5,15 +5,19 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceUnit;
 import jpabook.jpashop.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor //repository도 쓸 수 있고, 일관성 유지 역할도 됨
+//스프링에선 안되고, 스프링 부트가 표준 인젝션(EntityManager는 AutoWired로 안되고 @PersistenceContext가 있어야 한다) 방법을 안써도 AutoWired 되도록 해주는 것
+//springDataJpa가 AutoWired되도록 지원.
 public class MemberRepository {
 
-    @PersistenceContext//스프링이 만들어서 주입해줌
-    private EntityManager em;
+//    @PersistenceContext//스프링이 만들어서 주입해줌
+    private final EntityManager em;
 
 //    @PersistenceUnit //직접 엔티티메니저를 주입하고 싶을 때.
 //    private EntityManagerFactory emf;
@@ -33,7 +37,7 @@ public class MemberRepository {
     }
 
 
-    public List<Member> findName(String name) {
+    public List<Member> findByName(String name) {
         //파라미터 바인딩
         return em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
                 .setParameter("name", name) //실제 바인딩 하는 곳
