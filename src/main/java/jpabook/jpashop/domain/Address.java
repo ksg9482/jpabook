@@ -19,4 +19,10 @@ public class Address {
     //public을 쓰면 접근이 너무 열려있기 때문에 jpa는 pretected까지 허용해준다.
     //어차피 상속할일 없기 때문에 jpa 스펙용으로 한다.
     protected Address() {}
+
+    public Address(String city, String street, String zipcode) {
+        this.city = city;
+        this.street = street;
+        this.zipcode = zipcode;
+    }
 }
