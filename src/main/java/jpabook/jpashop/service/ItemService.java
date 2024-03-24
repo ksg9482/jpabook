@@ -1,5 +1,6 @@
 package jpabook.jpashop.service;
 
+import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,21 @@ public class ItemService {
     @Transactional //root Transactional의 readOnly 대응
     public void saveItem(Item item) {
         itemRepository.save(item);
+    }
+
+    @Transactional
+    public void updateItem(Long itemId, String name, int price, int stockQuantity) {
+        Item findItem = itemRepository.findOne(itemId);
+        //findItem으로 찾아온 객체는 영속상태. 변경감지가 일어난다
+        //필요한 데이터만 받아서 변경감지로 업데이트 한다. 데이터가 너무 많으면 서비스에 dto를 만들어서 필요한 데이터를 전달한다.
+        findItem.setName(name);
+        findItem.setPrice(price);
+        findItem.setStockQuantity(stockQuantity);
+
+        //save등 호출하지 않아도 변경감지를 통해 업데이트 커밋 시점에 업데이트 쿼리 생성됨.
+        //Transactional이 있으므로 플러시를 날린다. 플러시 -> 영속성 컨텍스트에 있는 엔티티 중 변경된 것이 무엇인지 찾아서 업데이트 한다.
+
+
     }
 
     public List<Item> findItems() {
